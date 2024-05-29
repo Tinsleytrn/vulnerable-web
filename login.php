@@ -6,7 +6,6 @@ if (isset($_SESSION["user"])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +17,7 @@ if (isset($_SESSION["user"])) {
 
 <body>
     <?php
-    //Vulnerable code
+        //Vulnerable code
       if (isset($_POST["login"])) {
           $username = $_POST["username"];
           $password = $_POST["password"];
@@ -35,27 +34,26 @@ if (isset($_SESSION["user"])) {
               echo "<p>Invalid credentials.</p>";
           }
       }
-    // How to prevent SQL: secure code
-        // if (isset($_POST["login"])) {
-        //      $email = $_POST["email"];
-        //      $password = $_POST["password"];
-        //      require_once "database.php";
-        //      $sql = "SELECT * FROM users WHERE email = '$email'";
-        //      $result = mysqli_query($conn, $sql);
-        //      $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        //      if ($user) {
-        //          if (password_verify($password, $user["password"])) {
-        //              session_start();
-        //              $_SESSION["user"] = $user["username"];
-        //              header("Location: profile.php");
-        //              die("Something when wrong");
-        //          } else {
-        //              echo "<div class='alert alert-danger'> Password does not match</div>";
-        //          }
-        //      } else {
-        //          echo "<div class='alert alert-danger'>Email does not match</div>";
-        //      }
-        //  }
+
+    //Prevent SQL Injection code
+    // if (isset($_POST["login"])) {
+    //     $username = $_POST["username"];
+    //     $password = $_POST["password"];
+    //     require_once "database.php";
+    //     $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    //     $stmt = mysqli_prepare($conn, $sql);
+    //     mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+    //     mysqli_stmt_execute($stmt);
+    //     $result = mysqli_stmt_get_result($stmt);
+    //     if ($result->num_rows > 0) {
+    //         echo "<p>Login successful!</p>";
+    //         session_start();
+    //         $_SESSION["user"] = $username;
+    //         header("Location: profile.php");
+    //     } else {
+    //         echo "<p>Invalid credentials.</p>";
+    //     }
+    // }
     ?>
 
     <form action="login.php" method="post">

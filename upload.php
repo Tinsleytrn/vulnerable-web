@@ -16,7 +16,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if ($row['role'] !== 'admin') {
-        header("Location: product.php");
+        header("Location: unauthorized.php");
         exit();
     }
 } else {
@@ -151,12 +151,14 @@ input[type="submit"],
             font-size: 16px;
         }
 
+
+
 </style>
     <h1>Upload Product</h1>
     <form action="upload.php" method="post" enctype="multipart/form-data">
            <button type="button" class="back-button" onclick="history.back()">Back</button>
         <label for="name">Product Name:</label>
-        <!-- Add value with htmlspecialchar or leave it -->
+        <!-- Add value with htmlspecialchar to prevent XSS -->
         <input type="text" id="name" name="name" value="" required><br>
         <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea><br>
