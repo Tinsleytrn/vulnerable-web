@@ -4,8 +4,27 @@ if (!isset($_SESSION["user"])) {
     header("Location: product.php");
     exit();
 }
-
 require_once "database.php";
+
+$username = $_SESSION["user"];
+$sql = "SELECT role FROM users WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] !== 'admin') {
+        header("Location: product.php");
+        exit();
+    }
+} else {
+    // If user does not exist in the database, log them out
+    session_destroy();
+    header("Location: product.php");
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];

@@ -4,10 +4,23 @@ if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     exit();
 }
-
 require_once "database.php";
-
 $username = $_SESSION["user"];
+$sql = "SELECT email FROM users WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $email = $row['email'];
+} else {
+    // If user does not exist in the database, log them out
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 
 //Vulnerable file upload code
 if (isset($_POST["upload"])) {
@@ -139,16 +152,18 @@ if (isset($_POST["update_email"])) {
         <h3>Update Email</h3>
         <form action="" method="post" class="log-out-btn">
             <div class="mb-3">
-                <p>Email: <?php echo htmlspecialchars($email); ?></p>
+                <p><?php echo htmlspecialchars($email); ?></p>
                 <input type="email" name="email" id="email" class="form-control" placeholder="Enter your new email">
             </div>
             <button type="submit" class="btn btn-primary" name="update_email">Update Email</button>
         </form>
+
         <div class="button-container">
             <!-- Home button -->
             <form action="product.php" method="post" class="log-out-btn">
                 <button type="submit" class="btn btn-success">Go To Shop</button>
             </form>
+
             <!-- Logout button -->
             <form action="logout.php" method="post" class="log-out-btn">
                 <button type="submit" class="btn btn-danger">Log Out</button>
