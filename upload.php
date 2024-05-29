@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             echo "Product uploaded successfully.";
-            header("Location: products.php");
+            header("Location: product.php");
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
