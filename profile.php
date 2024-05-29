@@ -4,7 +4,10 @@ if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     exit();
 }
-$username = $_SESSION["user"]; // Retrieve username from session
+
+require_once "database.php";
+
+$username = $_SESSION["user"];
 
 //Vulnerable file upload code
 if (isset($_POST["upload"])) {
@@ -32,53 +35,53 @@ if (isset($_POST["upload"])) {
         echo "No file uploaded.";
     }
 
-//File upload Secure code: 
-// if (isset($_POST["upload"])) {
-//     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
-//         $target_dir = "images/";
-//         $uploadOk = 1;
-//         $imageFileType = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
-//         $check = getimagesize($_FILES["file"]["tmp_name"]);
+    //File upload Secure code: 
+    // if (isset($_POST["upload"])) {
+    //     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+    //         $target_dir = "images/";
+    //         $uploadOk = 1;
+    //         $imageFileType = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
+    //         $check = getimagesize($_FILES["file"]["tmp_name"]);
 
-//         // Check if image file is an actual image or fake image
-//         if ($check !== false) {
-//             echo "File is an image - " . $check["mime"] . ".";
-//             $uploadOk = 1;
-//         } else {
-//             echo "File is not an image.";
-//             $uploadOk = 0;
-//         }
+    //         // Check if image file is an actual image or fake image
+    //         if ($check !== false) {
+    //             echo "File is an image - " . $check["mime"] . ".";
+    //             $uploadOk = 1;
+    //         } else {
+    //             echo "File is not an image.";
+    //             $uploadOk = 0;
+    //         }
 
-//         // Check file size
-//         if ($_FILES["file"]["size"] > 500000) {
-//             echo "Sorry, your file is too large.";
-//             $uploadOk = 0;
-//         }
+    //         // Check file size
+    //         if ($_FILES["file"]["size"] > 500000) {
+    //             echo "Sorry, your file is too large.";
+    //             $uploadOk = 0;
+    //         }
 
-//         // Allow certain file formats
-//         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-//         if (!in_array($imageFileType, $allowed_types)) {
-//             echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-//             $uploadOk = 0;
-//         }
+    //         // Allow certain file formats
+    //         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+    //         if (!in_array($imageFileType, $allowed_types)) {
+    //             echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    //             $uploadOk = 0;
+    //         }
 
-//         // Rename the file to avoid using user-supplied names
-//         $new_file_name = uniqid('img_', true) . '.' . $imageFileType;
-//         $target_file = $target_dir . $new_file_name;
-//         // Check if $uploadOk is set to 0 by an error
-//         if ($uploadOk == 0) {
-//             echo "Sorry, your file was not uploaded.";
-//         } else {
-//             // if everything is ok, try to upload file
-//             if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-//                 echo "The file " . basename($_FILES["file"]["name"])  . " has been uploaded.";
-//             } else {
-//                 echo "Sorry, there was an error uploading your file.";
-//             }
-//         }
-//     } else {
-//         echo "No file uploaded.";
-//     }
+    //         // Rename the file to avoid using user-supplied names
+    //         $new_file_name = uniqid('img_', true) . '.' . $imageFileType;
+    //         $target_file = $target_dir . $new_file_name;
+    //         // Check if $uploadOk is set to 0 by an error
+    //         if ($uploadOk == 0) {
+    //             echo "Sorry, your file was not uploaded.";
+    //         } else {
+    //             // if everything is ok, try to upload file
+    //             if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+    //                 echo "The file " . basename($_FILES["file"]["name"])  . " has been uploaded.";
+    //             } else {
+    //                 echo "Sorry, there was an error uploading your file.";
+    //             }
+    //         }
+    //     } else {
+    //         echo "No file uploaded.";
+    //     }
 }
 
 ?>
@@ -111,19 +114,26 @@ if (isset($_POST["upload"])) {
             </div>
         <?php endif; ?>
 
-        <div class="button-container">
-       <!-- Home button -->
-        <form action="product.php" method="post" class="log-out-btn">
-            <button type="submit" class="btn btn-success">Go To Shop</button>
+        <h2>Update Email</h2>
+        <form action="" method="post" class="mt-3">
+            <div class="mb-3">
+                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your new email">
+            </div>
+            <button type="submit" class="btn btn-primary" name="update_email">Update Email</button>
         </form>
 
-        <!-- Logout button -->
-        <form action="logout.php" method="post" class="log-out-btn">
-            <button type="submit" class="btn btn-danger">Log Out</button>
-        </form>
+        <div class="button-container">
+            <!-- Home button -->
+            <form action="product.php" method="post" class="log-out-btn">
+                <button type="submit" class="btn btn-success">Go To Shop</button>
+            </form>
+
+            <!-- Logout button -->
+            <form action="logout.php" method="post" class="log-out-btn" >
+                <button type="submit" class="btn btn-danger">Log Out</button>
+            </form>
         </div>
     </div>
-    
 </body>
 
 </html>

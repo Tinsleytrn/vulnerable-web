@@ -94,7 +94,7 @@ $conn->close();
 
         .footer {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             background-color: #4CAF50;
             color: white;
             position: fixed;
@@ -130,6 +130,23 @@ $conn->close();
             position: absolute;
             left: 20px;
         }
+        .log-out{
+            position: center;
+            left: 100px; 
+        }
+        .log-out-btn{
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -138,14 +155,19 @@ $conn->close();
         <button class="back-button" onclick="history.back()">Back</button>
         <h1>Welcome to the Shop</h1>
         <p>Hi, <?php echo htmlspecialchars($_SESSION["user"]); ?>!</p>
+        <form action="logout.php" method="post" class="log-out">
+                <button type="submit" class="log-out-btn">Log Out</button>
+            </form>
     </div>
     <div class="container">
         <div class="products">
+            
             <?php foreach ($products as $product) : ?>
                 <div class="product">
-                    <h2><?php echo htmlspecialchars($product['name']); ?></h2>
-                    <img src="uploads/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
-                    <p><?php echo htmlspecialchars($product['description']); ?></p>
+                    <!-- adding htmlspecialchars to prevent XSS -->
+                    <h2><?php echo ($product['name']); ?></h2>
+                    <img src="uploads/<?php echo ($product['image']); ?>" alt="<?php echo ($product['name']); ?>">
+                    <p><?php echo ($product['description']); ?></p>
                     <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
                     <form action="" method="post">
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
