@@ -84,6 +84,28 @@ if (isset($_POST["upload"])) {
     //     }
 }
 
+if (isset($_POST["update_email"])) {
+    if (isset($_POST["email"])) {
+        $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Assume $conn is your database connection
+            require_once "database.php";
+            $stmt = $conn->prepare("UPDATE users SET email = ? WHERE username = ?");
+            $stmt->bind_param("ss", $email, $username);
+            if ($stmt->execute()) {
+                echo "Email updated successfully.";
+            } else {
+                echo "Error updating email.";
+            }
+            $stmt->close();
+        } else {
+            echo "Invalid email format.";
+        }
+    } else {
+        echo "Email is required.";
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,7 +123,7 @@ if (isset($_POST["upload"])) {
     <div class="container">
         <h1 class="mt-5">Welcome, <?php echo htmlspecialchars($username); ?></h1> <!-- Display username -->
         <h2>Upload Profile Picture</h2>
-        <form action="" method="post" enctype="multipart/form-data" class="mt-3">
+        <form action="" method="post" enctype="multipart/form-data" class="log-out-btn">
             <div class="mb-3">
                 <input type="file" name="file" id="file" class="form-control">
             </div>
@@ -113,23 +135,22 @@ if (isset($_POST["upload"])) {
                 <img src="<?php echo htmlspecialchars($target_file); ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 200px;">
             </div>
         <?php endif; ?>
-
-        <h2>Update Email</h2>
-        <form action="" method="post" class="mt-3">
+        <br>
+        <h3>Update Email</h3>
+        <form action="" method="post" class="log-out-btn">
             <div class="mb-3">
+                <p>Email: <?php echo htmlspecialchars($email); ?></p>
                 <input type="email" name="email" id="email" class="form-control" placeholder="Enter your new email">
             </div>
             <button type="submit" class="btn btn-primary" name="update_email">Update Email</button>
         </form>
-
         <div class="button-container">
             <!-- Home button -->
             <form action="product.php" method="post" class="log-out-btn">
                 <button type="submit" class="btn btn-success">Go To Shop</button>
             </form>
-
             <!-- Logout button -->
-            <form action="logout.php" method="post" class="log-out-btn" >
+            <form action="logout.php" method="post" class="log-out-btn">
                 <button type="submit" class="btn btn-danger">Log Out</button>
             </form>
         </div>
