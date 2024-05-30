@@ -4,31 +4,26 @@ if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     exit();
 }
-
 require_once "database.php";
-
 // Fetch products from the database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
-
 if ($result->num_rows > 0) {
     $products = $result->fetch_all(MYSQLI_ASSOC);
 } else {
     $products = [];
 }
-
 $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f8f8;
             margin: 0;
             padding: 0;
@@ -44,7 +39,7 @@ $conn->close();
         .header {
             text-align: center;
             padding: 20px 0;
-            background-color: #4CAF50;
+            background-color: #a18b89;
             color: white;
         }
 
@@ -86,7 +81,7 @@ $conn->close();
         }
 
         .product .price {
-            color: #4CAF50;
+            color: #beb2b1;
             font-size: 1.2em;
             font-weight: bold;
             margin: 10px 0;
@@ -95,7 +90,7 @@ $conn->close();
         .footer {
             text-align: center;
             padding: 10px;
-            background-color: #4CAF50;
+            background-color: #a18b89;
             color: white;
             position: fixed;
             bottom: 0;
@@ -116,9 +111,9 @@ $conn->close();
         }
 
         .back-button {
-            background-color: #ffffff;
+            background-color: #827776;
             border: none;
-            color: #4CAF50;
+            color: white;
             padding: 10px 20px;
             text-align: center;
             text-decoration: none;

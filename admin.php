@@ -53,7 +53,6 @@ $result = $conn->query($sql);
                         <td><?php echo htmlspecialchars($row['email']); ?></td>
                         <td><?php echo htmlspecialchars($row['role']); ?></td>
                         <td>
-                            <a href="edit_user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
                             <a href="delete_user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
