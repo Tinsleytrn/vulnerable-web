@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once "database.php";
 $username = $_SESSION["user"];
@@ -58,6 +59,7 @@ $result = $conn->query($sql);
                         <td>
                             <a href="delete_user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger">Delete</a>
                         </td>
+
                     </tr>
                 <?php endwhile; ?>
             </tbody>
