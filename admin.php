@@ -23,17 +23,20 @@ $result = $conn->query($sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <title>Admin Dashboard</title>
 </head>
+
 <body>
     <div class="container">
         <h1 class="mt-5">Admin Dashboard</h1>
         <p>Welcome, <?php echo htmlspecialchars($_SESSION["user"]); ?>!</p>
-
+        <a href="upload.php" class="btn btn-primary">Upload Panel</a>
+        <br><br>
         <h2>User Management</h2>
         <table class="table">
             <thead>
@@ -46,7 +49,7 @@ $result = $conn->query($sql);
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
+                <?php while ($row = $result->fetch_assoc()) : ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['id']); ?></td>
                         <td><?php echo htmlspecialchars($row['username']); ?></td>
@@ -63,6 +66,7 @@ $result = $conn->query($sql);
         <a href="logout.php" class="btn btn-primary">Log Out</a>
     </div>
 </body>
+
 </html>
 
 <?php

@@ -81,7 +81,7 @@ $conn->close();
         }
 
         .product .price {
-            color: #beb2b1;
+            color: #827776;
             font-size: 1.2em;
             font-weight: bold;
             margin: 10px 0;
@@ -125,12 +125,16 @@ $conn->close();
             position: absolute;
             left: 20px;
         }
+        .back-button:hover {
+            background-color: #b4a3a1;
+        }
+
         .log-out{
             position: center;
             left: 100px; 
         }
         .log-out-btn{
-            background-color: #e74c3c;
+            background-color: #e55242;
             border: none;
             color: white;
             padding: 10px 20px;
@@ -142,12 +146,51 @@ $conn->close();
             margin: 4px 2px;
             cursor: pointer;
         }
+
+        .log-out-btn:hover {
+            background-color: #e96e61;
+        }
+
+        .add-to-cart-btn{
+            background-color: #827776;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #b4a3a1;
+        }
+
+        .user-button {
+            background-color: #827776;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: absolute;
+            left: 120px;
+        }
+        .user-button:hover {
+            background-color: #b4a3a1;
+        }
+
     </style>
 </head>
 
 <body>
     <div class="header">
         <button class="back-button" onclick="history.back()">Back</button>
+        <form action="profile.php" method="post">
+                <button type="submit" class="user-button">User Panel</button>
+            </form>
         <h1>Welcome to the Shop</h1>
         <p>Hi, <?php echo htmlspecialchars($_SESSION["user"]); ?>!</p>
         <form action="logout.php" method="post" class="log-out">
@@ -166,7 +209,7 @@ $conn->close();
                     <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
                     <form action="" method="post">
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                        <button type="submit" name="add_to_cart">Add to Cart</button>
+                        <button type="submit" name="add_to_cart" class="add-to-cart-btn">Add to Cart</button>
                     </form>
                 </div>
             <?php endforeach; ?>
