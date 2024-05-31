@@ -1,8 +1,10 @@
 <?php
 session_start();
+// Log in by username
 // if (!isset($_SESSION["user"])) {
 //     header("Location: login.php");
 //     exit();
+// }
 // require_once "database.php";
 // $username = $_SESSION["user"];
 // $sql = "SELECT email FROM users WHERE username = ? ";
@@ -21,7 +23,7 @@ session_start();
 //     exit();
 // }
 
-// Log in by user id
+// // Log in by user id
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
     exit();
@@ -46,7 +48,6 @@ if ($result->num_rows > 0) {
     header("Location: login.php");
     exit();
 }
-
 
 //  Vulnerable file upload code
 if (isset($_POST["upload"])) {
