@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["user"])) {
+if (isset($_SESSION["user_id"])) {
     header("Location: profile.php");
 }
 ?>
@@ -14,27 +14,29 @@ if (isset($_SESSION["user"])) {
     <link rel="stylesheet" href="style.css">
     <title>Log In</title>
 </head>
-
 <body>
     <?php
         //Vulnerable code
-      if (isset($_POST["login"])) {
-          $username = $_POST["username"];
-          $password = $_POST["password"];
-          require_once "database.php";
-          $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-          // echo $sql;
-          $result = mysqli_query($conn, $sql);
-          if ($result->num_rows > 0) {
-              echo "<p>Login successful!</p>";
-              session_start();
-              $_SESSION["user"] = $username;
-              header("Location: profile.php");
-          } else {
-              echo "<p>Invalid credentials.</p>";
-          }
-      }
-
+    if (isset($_POST["login"])) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        require_once "database.php";
+        $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        // echo $sql;
+        $result = mysqli_query($conn, $sql);
+        if ($result->num_rows > 0) {
+            $user = mysqli_fetch_assoc($result);
+            $user_id = $user["id"]; // Include user id
+            echo "<p>Login successful!</p>";
+            session_start();
+            $_SESSION["user"] = $username;
+            $_SESSION["user_id"] = $user_id; // Store user id in session
+            $user_id = $_GET['user_id'];
+            header("Location: profile.php");
+        } else {
+            echo "<p>Invalid credentials.</p>";
+        }
+    }
     //Prevent SQL Injection code
     // if (isset($_POST["login"])) {
     //     $username = $_POST["username"];
@@ -55,7 +57,6 @@ if (isset($_SESSION["user"])) {
     //     }
     // }
     ?>
-
     <form action="login.php" method="post">
         <h1>Log In</h1>
         <div class="form-group">

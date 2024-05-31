@@ -4,6 +4,7 @@ if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     exit();
 }
+$user_id = $_SESSION["user_id"];
 require_once "database.php";
 // Fetch products from the database
 $sql = "SELECT * FROM products";
@@ -188,7 +189,7 @@ $conn->close();
 <body>
     <div class="header">
         <button class="back-button" onclick="history.back()">Back</button>
-        <form action="profile.php" method="post">
+        <form action="profile.php?user_id=<?php echo $user_id; ?>" method="post">
                 <button type="submit" class="user-button">User Panel</button>
             </form>
         <h1>Welcome to the Shop</h1>

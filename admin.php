@@ -8,7 +8,6 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
-
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if ($row['role'] !== 'admin') {
@@ -16,12 +15,10 @@ if ($result->num_rows > 0) {
         exit();
     }
 }
-
 // Fetch users for admin to manage (example functionality)
 $sql = "SELECT id, username, email, role FROM users";
 $result = $conn->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 

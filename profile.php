@@ -1,19 +1,44 @@
 <?php
 session_start();
-if (!isset($_SESSION["user"])) {
+// if (!isset($_SESSION["user"])) {
+//     header("Location: login.php");
+//     exit();
+// require_once "database.php";
+// $username = $_SESSION["user"];
+// $sql = "SELECT email FROM users WHERE username = ? ";
+// $stmt = $conn->prepare($sql);
+// $stmt->bind_param("s", $username);
+// $stmt->execute();
+// $result = $stmt->get_result();
+
+// if ($result->num_rows > 0) {
+//     $row = $result->fetch_assoc();
+//     $email = $row['email'];
+// } else {
+//     // If user does not exist in the database, log them out
+//     session_destroy();
+//     header("Location: login.php");
+//     exit();
+// }
+
+// Log in by user id
+if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
     exit();
 }
+
 require_once "database.php";
-$username = $_SESSION["user"];
-$sql = "SELECT email FROM users WHERE username = ?";
+$user_id = $_SESSION["user_id"]; // Get the user ID from the session
+$sql = "SELECT username, email FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Check if the user exists in the database
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
+    $username = $row['username'];
     $email = $row['email'];
 } else {
     // If user does not exist in the database, log them out
@@ -22,81 +47,84 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-// // Vulnerable file upload code
+
+//  Vulnerable file upload code
+if (isset($_POST["upload"])) {
+    // Check if file was uploaded without errors
+    if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+        $target_dir = "images/";
+        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+
+        // Check file size (arbitrarily large limit for demonstration)
+        if ($_FILES["file"]["size"] > 5000000) {
+            echo "Sorry, your file is too large.";
+            exit();
+        }
+
+        // Allow any file type (no proper validation)
+        $uploadOk = 1;
+
+        // Attempt to move the uploaded file to the target directory
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    } else {
+        echo "No file uploaded.";
+    }
+}
+
+// File upload Secure code: 
 // if (isset($_POST["upload"])) {
-//     // Check if file was uploaded without errors
-//     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
-//         $target_dir = "images/";
-//         $target_file = $target_dir . basename($_FILES["file"]["name"]);
+//         if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+//             $target_dir = "images/";
+//             $uploadOk = 1;
+//             $imageFileType = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
+//             $check = getimagesize($_FILES["file"]["tmp_name"]);
 
-//         // Check file size (arbitrarily large limit for demonstration)
-//         if ($_FILES["file"]["size"] > 5000000) {
-//             echo "Sorry, your file is too large.";
-//             exit();
-//         }
+//             // Check if image file is an actual image or fake image
+//             if ($check !== false) {
+//                 echo "File is an image - " . $check["mime"] . ".";
+//                 $uploadOk = 1;
+//             } else {
+//                 echo "File is not an image.";
+//                 $uploadOk = 0;
+//             }
 
-//         // Allow any file type (no proper validation)
-//         $uploadOk = 1;
+//             // Check file size
+//             if ($_FILES["file"]["size"] > 500000) {
+//                 echo "Sorry, your file is too large.";
+//                 $uploadOk = 0;
+//             }
 
-//         // Attempt to move the uploaded file to the target directory
-//         if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-//             echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
+//             // Allow certain file formats
+//             $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+//             if (!in_array($imageFileType, $allowed_types)) {
+//                 echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+//                 $uploadOk = 0;
+//             }
+
+//             // Rename the file to avoid using user-supplied names
+//             $new_file_name = uniqid('img_', true) . '.' . $imageFileType;
+//             $target_file = $target_dir . $new_file_name;
+//             // Check if $uploadOk is set to 0 by an error
+//             if ($uploadOk == 0) {
+//                 echo "Sorry, your file was not uploaded.";
+//             } else {
+//                 // if everything is ok, try to upload file
+//                 if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+//                     echo "The file " . basename($_FILES["file"]["name"])  . " has been uploaded.";
+//                 } else {
+//                     echo "Sorry, there was an error uploading your file.";
+//                 }
+//             }
 //         } else {
-//             echo "Sorry, there was an error uploading your file.";
+//             echo "No file uploaded.";
 //         }
-//     } else {
-//         echo "No file uploaded.";
 //     }
 
-    // File upload Secure code: 
-    if (isset($_POST["upload"])) {
-        if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
-            $target_dir = "images/";
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
-            $check = getimagesize($_FILES["file"]["tmp_name"]);
-
-            // Check if image file is an actual image or fake image
-            if ($check !== false) {
-                echo "File is an image - " . $check["mime"] . ".";
-                $uploadOk = 1;
-            } else {
-                echo "File is not an image.";
-                $uploadOk = 0;
-            }
-
-            // Check file size
-            if ($_FILES["file"]["size"] > 500000) {
-                echo "Sorry, your file is too large.";
-                $uploadOk = 0;
-            }
-
-            // Allow certain file formats
-            $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-            if (!in_array($imageFileType, $allowed_types)) {
-                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                $uploadOk = 0;
-            }
-
-            // Rename the file to avoid using user-supplied names
-            $new_file_name = uniqid('img_', true) . '.' . $imageFileType;
-            $target_file = $target_dir . $new_file_name;
-            // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
-            } else {
-                // if everything is ok, try to upload file
-                if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-                    echo "The file " . basename($_FILES["file"]["name"])  . " has been uploaded.";
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
-                }
-            }
-        } else {
-            echo "No file uploaded.";
-        }
-    }
-
+//  Email Update code
 if (isset($_POST["update_email"])) {
     if (isset($_POST["email"])) {
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
@@ -153,10 +181,12 @@ if (isset($_POST["update_email"])) {
         <form action="" method="post" class="log-out-btn">
             <div class="mb-3">
                 <p><?php echo htmlspecialchars($email); ?></p>
+                <input type="hidden" name="user_id" value="">
                 <input type="email" name="email" id="email" class="form-control" placeholder="Enter your new email">
             </div>
             <button type="submit" class="btn btn-primary" name="update_email">Update Email</button>
         </form>
+      <input type="hidden" name="user_id" value="<?php echo $_SESSION["user_id"]; ?>">
 
         <div class="button-container">
             <!-- Home button -->

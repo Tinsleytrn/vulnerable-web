@@ -174,8 +174,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
     <h1>Upload Product</h1>
     <form action="upload.php" method="post" enctype="multipart/form-data">
+        <!--Navigate to product.php to htmlspecialchars-->
         <label for="name">Product Name:</label>
-        <!-- Add value with htmlspecialchar to prevent XSS -->
         <input type="text" id="name" name="name" value="" required><br>
         <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea><br>
