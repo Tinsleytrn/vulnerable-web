@@ -16,50 +16,14 @@ if (isset($_SESSION["user_id"])) {
 </head>
 <body>
     <?php
-        //Vulnerable code
-    // if (isset($_POST["login"])) {
-    //     $username = $_POST["username"];
-    //     $password = $_POST["password"];
-    //     require_once "database.php";
-    //     $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-    //     // echo $sql;
-    //     $result = mysqli_query($conn, $sql);
-    //     if ($result->num_rows > 0) {
-    //         $user = mysqli_fetch_assoc($result);
-    //         $user_id = $user["id"]; // Include user id
-    //         echo "<p>Login successful!</p>";
-    //         session_start();
-    //         $_SESSION["user"] = $username;
-    //         $_SESSION["user_id"] = $user_id; // Store user id in session
-    //         $user_id = $_GET['user_id'];
-    //         // Set a cookie with user data
-    //         $user_data = json_encode([
-    //             'user_id' => $user["user_id"],
-    //             'username' => $user["username"],
-    //             'role' => $user["role"]
-    //         ]);
-    //         setcookie("user_data", $user_data, time() + (86400 * 30), "/"); // 30 days expiration
-
-    //         // Redirect to profile page
-    //         header("Location: profile.php");
-    //         exit();
-    //     } else {
-    //         $error_message = "Invalid credentials.";
-    //     }
-    // } else {
-    //     $error_message = "Invalid credentials.";
-    // }
-
-    //Prevent SQL Injection code
+       // Vulnerable code
     if (isset($_POST["login"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
         require_once "database.php";
-        $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+        $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        // echo $sql;
+        $result = mysqli_query($conn, $sql);
         if ($result->num_rows > 0) {
             $user = mysqli_fetch_assoc($result);
             $user_id = $user["id"]; // Include user id
@@ -67,17 +31,51 @@ if (isset($_SESSION["user_id"])) {
             session_start();
             $_SESSION["user"] = $username;
             $_SESSION["user_id"] = $user_id; // Store user id in session
-            $user_data = json_encode([
+            $user_id = $_GET['user_id'];
+            $user_data = serialize([
                 'user_id' => $user["user_id"],
                 'username' => $user["username"],
-                'role' => $user["role"]
+                'role' => $user["role"],
             ]);
-            setcookie("user_data", $user_data, time() + (86400 * 30), "/"); // 30 days expiration
+            setcookie("user_data", base64_encode($user_data), time() + (86400 * 30), "/"); // 30 days expiration
+            // Redirect to profile page
             header("Location: profile.php");
+            exit();
         } else {
-            echo "<p>Invalid credentials.</p>";
+            $error_message = "Invalid credentials.";
         }
+    } else {
+        $error_message = "Invalid credentials.";
     }
+
+    //Prevent SQL Injection code
+    // if (isset($_POST["login"])) {
+    //     $username = $_POST["username"];
+    //     $password = $_POST["password"];
+    //     require_once "database.php";
+    //     $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    //     $stmt = mysqli_prepare($conn, $sql);
+    //     mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+    //     mysqli_stmt_execute($stmt);
+    //     $result = mysqli_stmt_get_result($stmt);
+    //     if ($result->num_rows > 0) {
+    //         $user = mysqli_fetch_assoc($result);
+    //         $user_id = $user["id"]; // Include user id
+    //         echo "<p>Login successful!</p>";
+    //         session_start();
+    //         $_SESSION["user"] = $username;
+    //         $_SESSION["user_id"] = $user_id; // Store user id in session
+    //         $user_data = serialize([
+    //             'user_id' => $user["user_id"],
+    //             'username' => $user["username"],
+    //             'role' => $user["role"]
+    //         ]);
+    //         setcookie("user_data", base64_encode($user_data), time() + (86400 * 30), "/"); // 30 days expiration
+    //         header("Location: profile.php");
+    //     } else {
+    //         echo "<p>Invalid credentials.</p>";
+    //     }
+    // }
     ?>
     
     <form action="login.php" method="post">
