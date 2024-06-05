@@ -32,11 +32,24 @@ if (isset($_SESSION["user_id"])) {
             $_SESSION["user"] = $username;
             $_SESSION["user_id"] = $user_id; // Store user id in session
             $user_id = $_GET['user_id'];
+            // Set a cookie with user data
+            $user_data = json_encode([
+                'user_id' => $user["user_id"],
+                'username' => $user["username"],
+                'role' => $user["role"]
+            ]);
+            setcookie("user_data", $user_data, time() + (86400 * 30), "/"); // 30 days expiration
+
+            // Redirect to profile page
             header("Location: profile.php");
+            exit();
         } else {
-            echo "<p>Invalid credentials.</p>";
+            $error_message = "Invalid credentials.";
         }
+    } else {
+        $error_message = "Invalid credentials.";
     }
+
     //Prevent SQL Injection code
     // if (isset($_POST["login"])) {
     //     $username = $_POST["username"];
@@ -57,6 +70,7 @@ if (isset($_SESSION["user_id"])) {
     //     }
     // }
     ?>
+    
     <form action="login.php" method="post">
         <h1>Log In</h1>
         <div class="form-group">
