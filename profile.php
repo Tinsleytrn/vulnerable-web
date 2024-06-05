@@ -1,55 +1,61 @@
 <?php
 session_start();
-// Log in by username
-// if (!isset($_SESSION["user"])) {
-//     header("Location: login.php");
-//     exit();
-// }
-// require_once "database.php";
-// $username = $_SESSION["user"];
-// $sql = "SELECT email FROM users WHERE username = ? ";
+ // Log in by user cookie session
+if (!isset($_COOKIE["user_data"])){
+    header("Location: login.php");
+    exit();
+}
+$user_data = json_decode($_COOKIE["user_data"], true);
+$username = $user_data["username"];
+$user_id = $user_data["user_id"];
+
+// Prevent Insecure Deserialization Code
+//  require_once "database.php";
+// $user_id = $_SESSION["user_id"]; // Get the user ID from the session
+// $sql = "SELECT username, email FROM users WHERE id = ?";
 // $stmt = $conn->prepare($sql);
-// $stmt->bind_param("s", $username);
+// $stmt->bind_param("i", $user_id);
 // $stmt->execute();
 // $result = $stmt->get_result();
 
+// // Check if the user exists in the database
 // if ($result->num_rows > 0) {
 //     $row = $result->fetch_assoc();
+//     $username = $row['username'];
 //     $email = $row['email'];
 // } else {
 //     // If user does not exist in the database, log them out
 //     session_destroy();
+//     setcookie("user_data", "", time() - 3600, "/");
 //     header("Location: login.php");
 //     exit();
 // }
 
-// // Log in by user id
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
-    exit();
-}
-
+//  Insecure Deserialization to change to another user profile
 require_once "database.php";
-$user_id = $_SESSION["user_id"]; // Get the user ID from the session
-$sql = "SELECT username, email FROM users WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
+if (isset($_GET["user_id"])) {
+    $user_id = $_GET["user_id"];
+    $sql = "SELECT username, email FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Check if the user exists in the database
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $username = $row['username'];
-    $email = $row['email'];
-} else {
-    // If user does not exist in the database, log them out
+    // Check if the user exists in the database
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $username = $row['username'];
+        $email = $row['email'];
+    } else {
+     // If user does not exist in the database, log them out
     session_destroy();
+    setcookie("user_data", "", time() - 3600, "/");
     header("Location: login.php");
     exit();
+    }
 }
 
-//  Vulnerable file upload code
+//  Vulnerable File upload code:
 if (isset($_POST["upload"])) {
     // Check if file was uploaded without errors
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
