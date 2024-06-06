@@ -76,7 +76,7 @@ if (isset($_SESSION["user_id"])) {
     //         echo "<p>Invalid credentials.</p>";
     //     }
     // }
-    // ?>
+    ?>
     
     <form action="login.php" method="post">
         <h1>Log In</h1>
@@ -94,7 +94,7 @@ if (isset($_SESSION["user_id"])) {
     </form>
     <div>
         <div>
-            <p>Don't Have An Account Yet? <a href="registration.php"> Register Here </a></p>
+            <p>Don't Have An Account Yet? <a href="registration.php"> Register Here !</a></p>
         </div>
     </div>
 </body>

@@ -34,7 +34,7 @@ if (isset($_GET["user_id"])) {
 }
 
 // Prevent Insecure Deserialization Code
- require_once "database.php";
+//  require_once "database.php";
 // $user_id = $_SESSION["user_id"]; // Get the user ID from the session
 // $sql = "SELECT username, email FROM users WHERE id = ?";
 // $stmt = $conn->prepare($sql);
@@ -188,7 +188,7 @@ if (isset($_POST["update_email"])) {
             </div>
             <button type="submit" class="btn btn-primary" name="update_email">Update Email</button>
         </form>
-      <input type="hidden" name="user_id" value="<?php echo $_SESSION["user_id"]; ?>">
+      <input type="hidden" name="user_id" value="<?php echo $_SESSION["user_id"] ?>">
 
         <div class="button-container">
             <!-- Home button -->

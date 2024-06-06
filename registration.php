@@ -52,7 +52,7 @@
                 echo "<div class='alert alert-success'> You are sign up successfully. </div>";
                 session_start();
                 $_SESSION["user"] = $username;
-                header("Location: profile.php");
+                header("Location: login.php");
             } else {
                 die("Something went wrong");
             }
@@ -63,7 +63,7 @@
   <form action="registration.php" method="post">
           <h1>Register Form</h1>
             <div class="form-group">
-                <input type="text" class="form-control" name="username" placeholder="Userame:">
+                <input type="text" class="form-control" name="username" placeholder="Username:">
             </div>
             <br>
             <div class="form-group">
