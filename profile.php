@@ -34,7 +34,7 @@ if (isset($_GET["user_id"])) {
 }
 
 // Prevent Insecure Deserialization Code
-//  require_once "database.php";
+ require_once "database.php";
 // $user_id = $_SESSION["user_id"]; // Get the user ID from the session
 // $sql = "SELECT username, email FROM users WHERE id = ?";
 // $stmt = $conn->prepare($sql);
@@ -62,16 +62,13 @@ if (isset($_POST["upload"])) {
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
         $target_dir = "images/";
         $target_file = $target_dir . basename($_FILES["file"]["name"]);
-
         // Check file size (arbitrarily large limit for demonstration)
         if ($_FILES["file"]["size"] > 5000000) {
             echo "Sorry, your file is too large.";
             exit();
         }
-
         // Allow any file type (no proper validation)
         $uploadOk = 1;
-
         // Attempt to move the uploaded file to the target directory
         if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
             echo "The file " . basename($_FILES["file"]["name"]) . " has been uploaded.";
@@ -99,20 +96,17 @@ if (isset($_POST["upload"])) {
 //                 echo "File is not an image.";
 //                 $uploadOk = 0;
 //             }
-
 //             // Check file size
 //             if ($_FILES["file"]["size"] > 500000) {
 //                 echo "Sorry, your file is too large.";
 //                 $uploadOk = 0;
 //             }
-
 //             // Allow certain file formats
 //             $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
 //             if (!in_array($imageFileType, $allowed_types)) {
 //                 echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 //                 $uploadOk = 0;
 //             }
-
 //             // Rename the file to avoid using user-supplied names
 //             $new_file_name = uniqid('img_', true) . '.' . $imageFileType;
 //             $target_file = $target_dir . $new_file_name;

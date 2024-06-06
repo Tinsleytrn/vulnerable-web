@@ -76,7 +76,7 @@ if (isset($_SESSION["user_id"])) {
     //         echo "<p>Invalid credentials.</p>";
     //     }
     // }
-    ?>
+    // ?>
     
     <form action="login.php" method="post">
         <h1>Log In</h1>
